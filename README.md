@@ -22,19 +22,32 @@ Paste that directly into the YouTube description and chapters are live.
 - **PowerShell 7+** (cross-platform: Windows, macOS, Linux)
 - An EDL exported from **Adobe Premiere Pro** (A1 audio track)
 
-## Usage
+#---
 
-1. Export your sequence(s) from Premiere as EDL files:
-   `File → Export → EDL...`
+## Files
 
-2. Drop one or more `.edl` files into the same folder as `EDL-to-YouTube-Chapters.ps1`.
+| File | Purpose |
+|---|---|
+| `EDL-to-YouTube-Chapters.ps1` | Core script — PowerShell 7, all platforms |
+| `EDL2YTChapters.bat` | Windows drag-and-drop launcher |
+| `edl2ytchapters.sh` | Bash launcher for macOS / Linux |
 
-3. Run the script:
-   ```powershell
-   .\EDL-to-YouTube-Chapters.ps1
-   ```
+---
 
-4. A `.txt` file named after each EDL will appear in the same folder. Open, copy, paste into YouTube.
+# Usage
+
+## Windows — Drag and Drop
+
+1. Export your sequence(s) from Premiere: `File → Export → EDL...`
+2. Place `EDL2YTChapters.bat` and `EDL-to-YouTube-Chapters.ps1` in the same folder anywhere on your machine.
+3. Select one or more `.edl` files in Explorer and drag them onto `EDL2YTChapters.bat`.
+4. A console window opens, processes each file, and waits for a keypress. A `.txt` file appears next to each source EDL.
+
+> **First run only:** Windows may warn that the `.bat` is from an unknown publisher. Click **More info → Run anyway**. You can also right-click → Properties → Unblock on both files to suppress future warnings.
+
+---
+
+A file named after each EDL will appear in the same folder. Open, copy, paste into YouTube.
 
 The script processes all `.edl` files in the folder in a single run — useful if you're batch converting a back-catalogue of albums at once.
 
