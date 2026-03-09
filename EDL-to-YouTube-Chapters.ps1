@@ -1,10 +1,12 @@
 # EDL-to-YouTube-Chapters.ps1
 # Converts one or more Premiere Pro EDL exports to YouTube chapter timestamps.
 #
-# Usage:
-#   1. Drop any number of .edl files in the same folder as this script.
-#   2. Run: .\EDL-to-YouTube-Chapters.ps1
-#   3. A .txt file named after each EDL will appear in the same folder.
+# Usage — three ways to run:
+#   1. Drag and drop .edl files onto EDL2YTChapters.bat (Windows)
+#   2. Pass .edl files as arguments: .\EDL-to-YouTube-Chapters.ps1 "Album1.edl" "Album2.edl"
+#   3. Drop .edl files in the same folder as this script and run with no arguments
+#
+# Output: a .txt file named after each EDL, saved in the same folder as that EDL.
 #
 # Output format:
 #   00:00:00 - Song Title
@@ -14,16 +16,26 @@
 # Requirements: PowerShell 7+
 # Tested with EDL exports from Adobe Premiere Pro (A1 audio track, Drop Frame).
 
-$scriptDir = $PSScriptRoot
+param(
+    [Parameter(ValueFromRemainingArguments)]
+    [string[]]$EDLPaths
+)
 
-# Find all .edl files in the script's directory
-$edlFiles = Get-ChildItem -Path $scriptDir -Filter "*.edl"
+# --- Resolve which files to process ---
+if ($EDLPaths -and $EDLPaths.Count -gt 0) {
+    # Files passed as arguments (drag-and-drop via .bat, or direct CLI use)
+    $edlFiles = $EDLPaths | ForEach-Object { Get-Item -LiteralPath $_ } | Where-Object { $_.Extension -ieq '.edl' }
+} else {
+    # Fallback: scan the script's own directory
+    $edlFiles = Get-ChildItem -Path $PSScriptRoot -Filter "*.edl"
+}
 
 if (-not $edlFiles) {
-    Write-Error "No .edl files found in $scriptDir"
+    Write-Error "No .edl files found. Drop .edl files onto EDL2YTChapters.bat, or place them in the script folder."
     exit 1
 }
 
+# --- Process each EDL ---
 foreach ($edlFile in $edlFiles) {
     Write-Host "`nProcessing: $($edlFile.Name)"
 
@@ -34,9 +46,9 @@ foreach ($edlFile in $edlFiles) {
         $line = $lines[$i].Trim()
 
         # Match A1 audio track lines: entry# AX A C <tc> <tc> <START_TC> <tc>
-        # The third timecode is the track start time — that's the YouTube chapter time.
+        # The third timecode is the track start time -- that's the YouTube chapter time.
         if ($line -match '^\d+\s+AX\s+A\s+C\s+\S+\s+\S+\s+(\d{2}:\d{2}:\d{2}):\d{2}\s+\S+') {
-            $startTime = $Matches[1]   # HH:MM:SS — frame number intentionally dropped
+            $startTime = $Matches[1]   # HH:MM:SS -- frame number intentionally dropped
 
             # Clip name is on the very next non-blank line
             $j = $i + 1
@@ -56,20 +68,23 @@ foreach ($edlFile in $edlFiles) {
     }
 
     if ($entries.Count -eq 0) {
-        Write-Warning "No A1 track entries found in $($edlFile.Name) — skipping."
+        Write-Warning "No A1 track entries found in $($edlFile.Name) -- skipping."
         continue
     }
 
     # Build output lines
     $outputLines = $entries | ForEach-Object { "$($_.Time) - $($_.Name)" }
 
-    # Write to {EDL Filename}.txt in the same folder as the script
+    # Output .txt lands in the same folder as the source EDL
     $outputName = [System.IO.Path]::GetFileNameWithoutExtension($edlFile.Name) + ".txt"
-    $outputPath = Join-Path $scriptDir $outputName
+    $outputPath = Join-Path $edlFile.DirectoryName $outputName
 
     $outputLines | Set-Content -Path $outputPath -Encoding UTF8
 
-    Write-Host "Done! $($entries.Count) chapters written to: $outputName"
+    Write-Host "Done! $($entries.Count) chapters written to: $outputPath"
     Write-Host ""
     $outputLines | ForEach-Object { Write-Host "  $_" }
 }
+
+Write-Host "`nAll done. Press any key to close..."
+$null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

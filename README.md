@@ -1,6 +1,6 @@
 # EDL to YouTube Chapters
 
-A lightweight PowerShell 7 script that converts an Adobe Premiere Pro EDL export into YouTube chapter timestamps — no plugins, no online tools, just PowerShell.
+A lightweight PowerShell 7 script that converts an Adobe Premiere Pro EDL export into YouTube chapter timestamps — no plugins, no online tools, no LLMs required.
 
 If you compose music albums or long-form videos in Premiere and publish them to YouTube, this script turns your EDL into a ready-to-paste chapter list in seconds.
 
@@ -23,21 +23,18 @@ Paste that directly into the YouTube description and chapters are live.
 - An EDL exported from **Adobe Premiere Pro** (A1 audio track)
 
 ## Usage
-Ensure your audio tracks on on A1. 
 
 1. Export your sequence(s) from Premiere as EDL files:
    `File → Export → EDL...`
-   `Select only Use Source File Name`
-   `Tracks to Export: Audio 1: Audio 1 - Channel 1. All others set to none.`
-   
-3. Drop one or more `.edl` files into the same folder as `EDL-to-YouTube-Chapters.ps1`.
 
-4. Run the script:
+2. Drop one or more `.edl` files into the same folder as `EDL-to-YouTube-Chapters.ps1`.
+
+3. Run the script:
    ```powershell
    .\EDL-to-YouTube-Chapters.ps1
    ```
 
-5. A `.txt` file named after each EDL will appear in the same folder. Open, copy, paste into YouTube description.
+4. A `.txt` file named after each EDL will appear in the same folder. Open, copy, paste into YouTube.
 
 The script processes all `.edl` files in the folder in a single run — useful if you're batch converting a back-catalogue of albums at once.
 
