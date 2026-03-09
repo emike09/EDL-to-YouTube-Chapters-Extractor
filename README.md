@@ -22,7 +22,7 @@ Paste that directly into the YouTube description and chapters are live.
 - **PowerShell 7+** (cross-platform: Windows, macOS, Linux)
 - An EDL exported from **Adobe Premiere Pro** (A1 audio track)
 
-#---
+---
 
 ## Files
 
