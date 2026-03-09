@@ -46,6 +46,41 @@ Paste that directly into the YouTube description and chapters are live.
 > **First run only:** Windows may warn that the `.bat` is from an unknown publisher. Click **More info → Run anyway**. You can also right-click → Properties → Unblock on both files to suppress future warnings.
 
 ---
+---
+
+## PowerShell — Command Line
+
+Requires PowerShell 7+ (`pwsh`). Works on Windows, macOS, and Linux.
+
+```powershell
+# One file
+.\EDL-to-YouTube-Chapters.ps1 "My Album.edl"
+
+# Multiple files
+.\EDL-to-YouTube-Chapters.ps1 "Album1.edl" "Album2.edl" "Album3.edl"
+
+# No arguments — scans the script's own folder for all .edl files
+.\EDL-to-YouTube-Chapters.ps1
+```
+
+---
+
+## Bash — Command Line (macOS / Linux)
+
+```bash
+# Make executable once
+chmod +x edl2ytchapters.sh
+
+# One or more files
+./edl2ytchapters.sh "My Album.edl"
+./edl2ytchapters.sh *.edl
+
+# No arguments -- scans the script's own folder
+./edl2ytchapters.sh
+```
+
+---
+
 
 A file named after each EDL will appear in the same folder. Open, copy, paste into YouTube.
 
